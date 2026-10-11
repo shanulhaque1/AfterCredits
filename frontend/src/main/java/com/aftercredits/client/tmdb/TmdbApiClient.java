@@ -122,7 +122,7 @@ public class TmdbApiClient {
         }
 
         try {
-            String url = buildRequestUrl("/movie/" + tmdbId + "?append_to_response=credits,external_ids&language=en-US");
+            String url = buildRequestUrl("/movie/" + tmdbId + "?append_to_response=credits,external_ids,videos&language=en-US");
             String json = executeGet(url);
             return Optional.ofNullable(parseMovieDetail(json));
         } catch (Exception e) {
@@ -218,6 +218,58 @@ public class TmdbApiClient {
         }
 
         return results;
+    }
+
+    /**
+     * Fetches currently popular movies.
+     */
+    public List<Movie> getPopularMovies() throws Exception {
+        if (!hasApiKey()) {
+            return Collections.emptyList();
+        }
+
+        String url = buildRequestUrl("/movie/popular?language=en-US&page=1");
+        String json = executeGet(url);
+        return parseSearchResponse(json);
+    }
+
+    /**
+     * Fetches the highest-rated movies.
+     */
+    public List<Movie> getTopRatedMovies() throws Exception {
+        if (!hasApiKey()) {
+            return Collections.emptyList();
+        }
+
+        String url = buildRequestUrl("/movie/top_rated?language=en-US&page=1");
+        String json = executeGet(url);
+        return parseSearchResponse(json);
+    }
+
+    /**
+     * Fetches movies currently playing in theatres.
+     */
+    public List<Movie> getNowPlayingMovies() throws Exception {
+        if (!hasApiKey()) {
+            return Collections.emptyList();
+        }
+
+        String url = buildRequestUrl("/movie/now_playing?language=en-US&page=1");
+        String json = executeGet(url);
+        return parseSearchResponse(json);
+    }
+
+    /**
+     * Fetches upcoming movie releases.
+     */
+    public List<Movie> getUpcomingMovies() throws Exception {
+        if (!hasApiKey()) {
+            return Collections.emptyList();
+        }
+
+        String url = buildRequestUrl("/movie/upcoming?language=en-US&page=1");
+        String json = executeGet(url);
+        return parseSearchResponse(json);
     }
 
     /**
